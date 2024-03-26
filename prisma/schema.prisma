@@ -1,0 +1,68 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Record {
+  id                   Int      @id @default(autoincrement())
+  date                 DateTime
+  basePrice            Float
+  shelfPrice           Float
+  promotedPrice        Float
+  onPromotion          Boolean
+  promotionDescription String
+  productId            Int
+  product              Product  @relation(fields: [productId], references: [id])
+  retailerId           Int
+  retailer             Retailer @relation(fields: [retailerId], references: [id])
+}
+
+model Product {
+  id             Int          @id @default(autoincrement())
+  ean            String       @unique
+  title          String
+  image          String
+  retailers      Retailer[]
+  records        Record[]
+  manufacturerId Int
+  manufacturer   Manufacturer @relation(fields: [manufacturerId], references: [id])
+  categoryId     Int
+  category       Category     @relation(fields: [categoryId], references: [id])
+  brandId        Int
+  brand          Brand        @relation(fields: [brandId], references: [id])
+}
+
+model Retailer {
+  id       Int       @id @default(autoincrement())
+  name     String    @unique
+  products Product[]
+  records  Record[]
+}
+
+model Manufacturer {
+  id       Int       @id @default(autoincrement())
+  name     String    @unique
+  products Product[]
+}
+
+model Category {
+  id       Int       @id @default(autoincrement())
+  name     String    @unique
+  products Product[]
+}
+
+model Brand {
+  id       Int       @id @default(autoincrement())
+  name     String    @unique
+  products Product[]
+}
