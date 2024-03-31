@@ -4,7 +4,12 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-} from "@remix-run/react";
+} from '@remix-run/react';
+import 'primereact/resources/themes/lara-light-cyan/theme.css';
+import 'primereact/resources/primereact.min.css';
+import 'primeflex/primeflex.css';
+import 'primeicons/primeicons.css';
+import { PrimeReactProvider } from 'primereact/api';
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -25,5 +30,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  return <Outlet />;
+  return (
+    <PrimeReactProvider>
+      <Outlet />
+    </PrimeReactProvider>
+  );
 }
